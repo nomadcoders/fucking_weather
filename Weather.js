@@ -1,24 +1,76 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 
-export default class Weather extends Component {
-  render() {
-    return (
-      <LinearGradient colors={["#00C6FB", "#005BEA"]} style={styles.container}>
-        <View style={styles.upper}>
-          <Ionicons name="ios-rainy" size={144} color="white" />
-          <Text style={styles.temperature}>45º</Text>
-        </View>
-        <View style={styles.lower}>
-          <Text style={styles.title}>Raining like a MF</Text>
-          <Text style={styles.subtitle}>For more info look outside</Text>
-        </View>
-      </LinearGradient>
-    );
+const weatherCases = {
+  Rain: {
+    colors: ["#00C6FB", "#005BEA"],
+    title: "Raining like a MF",
+    subtitle: "For more info look outside",
+    icon: "ios-rainy"
+  },
+  Clear: {
+    colors: ["#FEF253", "#FF7300"],
+    title: "Sunny as fuck",
+    subtitle: "Go get your ass burnt",
+    icon: "ios-sunny"
+  },
+  Thunderstorm: {
+    colors: ["#00ECBC", "#007ADF"],
+    title: "Thunder storm in the house!",
+    subtitle: "Actually, outside of the house",
+    icon: "ios-thunderstorm"
+  },
+  Clouds: {
+    colors: ["#D7D2CC", "#304352"],
+    title: "Clouds",
+    subtitle: "I know, fucking boring",
+    icon: "ios-cloudy"
+  },
+  Snow: {
+    colors: ["#7DE2FC", "#B9B6E5"],
+    title: "Cold as balls",
+    subtitle: "Do you want to build a snowman? Fuck no.",
+    icon: "ios-snow"
+  },
+  Drizzle: {
+    colors: ["#89F7FE", "#66A6FF"],
+    title: "Drizzle",
+    subtitle: "Is like rain, but gay 🏳️‍🌈",
+    icon: "ios-rainy-outline"
   }
+};
+
+export default function Weather({ weatherCase, temperature }) {
+  return (
+    <LinearGradient
+      colors={weatherCases[weatherCase].colors}
+      style={styles.container}
+    >
+      <View style={styles.upper}>
+        <Ionicons
+          name={weatherCases[weatherCase].icon}
+          size={144}
+          color="white"
+        />
+        <Text style={styles.temperature}>{temperature}º</Text>
+      </View>
+      <View style={styles.lower}>
+        <Text style={styles.title}>{weatherCases[weatherCase].title}</Text>
+        <Text style={styles.subtitle}>
+          {weatherCases[weatherCase].subtitle}
+        </Text>
+      </View>
+    </LinearGradient>
+  );
 }
+
+Weather.propTypes = {
+  weatherCase: PropTypes.string.isRequired,
+  temperature: PropTypes.number.isRequired
+};
 
 const styles = StyleSheet.create({
   container: {
