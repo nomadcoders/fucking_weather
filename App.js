@@ -12,19 +12,28 @@ export default class App extends Component {
   componentDidMount = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log(position);
-        this.setState({
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-          isLoaded: true
-        });
+        this._getWeather(position.coords.latitude, position.coords.longitude);
       },
       error => {
+        console.log(error);
         this.setState({
           error: error.message
         });
       }
     );
+  };
+  _getWeather = (lat, long) => {
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=241051bf13976dd3ddf8b8d9f247255e`
+    )
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          temperature: json.main.temp,
+          name: json.weather[0].main,
+          isLoaded: true
+        });
+      });
   };
   render() {
     const { isLoaded, error } = this.state;
@@ -36,7 +45,7 @@ export default class App extends Component {
         ) : (
           <View style={styles.loading}>
             <Text style={styles.loadingText}>Getting the fucking weather</Text>
-            {error ? <Text>error</Text> : null}
+            {error ? <Text>{error.message}</Text> : null}
           </View>
         )}
       </View>
