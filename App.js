@@ -4,14 +4,31 @@ import Weather from "./Weather";
 
 export default class App extends Component {
   state = {
-    isLoaded: false
+    isLoaded: false,
+    lat: null,
+    long: null
+  };
+  componentDidMount = () => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log(position);
+        this.setState({
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+          isLoaded: true
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
   };
   render() {
     const { isLoaded } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        {!isLoaded ? (
+        {isLoaded ? (
           <Weather />
         ) : (
           <View style={styles.loading}>
