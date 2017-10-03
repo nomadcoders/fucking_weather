@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
 import Weather from "./Weather";
 
 export default class App extends Component {
@@ -10,6 +10,7 @@ export default class App extends Component {
     const { isLoaded } = this.state;
     return (
       <View style={styles.container}>
+        <StatusBar hidden={true} />
         {!isLoaded ? (
           <Weather />
         ) : (
